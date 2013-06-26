@@ -1,0 +1,126 @@
+/**
+ * Responsive CSS Grid
+ *
+ * (c) 2012 Robert Picard
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ */
+
+
+*, *:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+}
+
+.row {
+    width: 100%;
+    max-width: 960px;
+    min-width: 755px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+[class*="col-"] {
+    float: left;
+    padding-right: 20px;
+}
+
+[class*="col-"]:last-of-type {
+    padding-right: 0;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.col-1 {
+    width: 6.25%;
+}
+
+.col-2 {
+    width: 12.5%;
+}
+
+.col-3 {
+    width: 18.75%;
+}
+
+.col-4 {
+    width: 25%;
+}
+
+.col-5 {
+    width: 31.25%;
+}
+
+.col-6 {
+    width: 37.5%;
+}
+
+.col-7 {
+    width: 43.75%;
+}
+
+.col-8 {
+    width: 50%;
+}
+
+.col-9 {
+    width: 56.25%;
+}
+
+.col-10 {
+    width: 62.5%;
+}
+
+.col-11 {
+    width: 68.75%;
+}
+
+.col-12 {
+    width: 75%;
+}
+
+.col-13 {
+    width: 81.25%;
+}
+
+.col-14 {
+    width: 87.5%;
+}
+
+.col-15 {
+    width: 93.75%;
+}
+
+.col-16 {
+    width: 100%;
+}
+
+@media handheld, only screen and (max-width: 767px) {
+
+    .row {
+        width: 100%;
+        min-width: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    [class*="col-"] {
+        width: auto;
+        float: none;
+        margin: 10px 0px 10px 0px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
