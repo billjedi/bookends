@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form action="{{ url_for('recover_account') }}" method="POST">
+    Email: <input type="text" name="email" /><br>
+    {{ form.csrf_token }}
+    <input type="submit" value="Recover my account" />
+</form>
+{% endblock %}
