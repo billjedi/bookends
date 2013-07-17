@@ -1,21 +1,26 @@
+import re
+
 from flask import render_template, flash, redirect, url_for, abort
 
 from flask.ext.login import login_required, login_user, current_user
 
 from . import app, db, util
 from .forms import (AccountCreateForm, AccountRecoverForm,
-                    AccountRecoverWithTokenForm, SignInForm)
-from .models import User
+                    AccountRecoverWithTokenForm, SignInForm, AddBookForm)
+from .models import User, Book, Set
 
 
 @app.route('/')
 def index():
     """ Home page when anonymous, dashboard when authenticated. """
 
-    if current_user.is_authenticated:
-        return render_template("user_index.html")
+    if current_user.is_anonymous():
+        return render_template("index.html")
 
-    return render_template("index.html")
+    return render_template(
+        "user_index.html",
+        books_excited=Book.query.filter_by(user_id=current_user.id, excited=True)
+    )
 
 
 @app.route('/about')
@@ -28,9 +33,9 @@ def create_account():
     form = AccountCreateForm()
     if form.validate_on_submit():
         user = User(
-                email = form.email.data,
-                password = form.password.data
-                )
+            email = form.email.data,
+            password = form.password.data
+        )
         db.session.add(user)
         db.session.commit()
 
@@ -137,37 +142,73 @@ def signout():
 @login_required
 @app.route('/books')
 def books():
-    pass
+    """ List the current user's books. """
+
+    return render_template('books/index.html', books=current_user.books)
 
 
 @login_required
 @app.route('/books/add', methods=["GET", "POST"])
 def add_book():
-    pass
+    form = AddBookForm()
+
+    if form.validate_on_submit():
+
+        book = Book(
+            title=form.title.data,
+            author=form.author.data,
+            url=form.url.data,
+            reading=form.reading.data,
+            excited=form.excited.data,
+            finished=form.finished.data
+        )
+
+        sets_given = re.findall(r"\{(.+?)\}", form.sets.data)
+
+        for set_title in sets_given:
+
+            existing_set = Set().query.filter_by(
+                title=set_title,
+                user_id=current_user.id
+            ).first()
+
+            if existing_set:
+                book.sets.append(existing_set)
+            else:
+                new_set = Set(title=set_title)
+                current_user.sets.append(new_set)
+                book.sets.append(new_set)
+
+        current_user.books.append(book)
+
+        db.session.add(current_user)
+        db.session.commit()
+
+        flash("<em>" + book.title + "</em> has been added.")
+
+        return redirect(url_for('add_book'))
+
+    return render_template('books/add.html', form=form)
 
 
 @login_required
-@app.route('/books/view/<int:book_id>')
-def view_book(book_id):
+@app.route('/books/edit/<int:book_id>')
+def edit_book(book_id):
     pass
 
 
 @login_required
 @app.route('/sets')
 def sets():
-    pass
-
-
-@login_required
-@app.route('/sets/add')
-def add_set():
-    pass
+    return render_template('/sets/index.html', sets=current_user.sets)
 
 
 @login_required
 @app.route('/sets/view/<int:set_id>')
 def view_set(set_id):
-    pass
+    set = current_user.sets.filter_by(id=set_id).first_or_404()
+
+    return render_template('/sets/view.html', set=set)
 
 
 @login_required

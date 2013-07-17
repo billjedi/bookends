@@ -1,0 +1,11 @@
+{% macro book_card(book) %}
+<div class="book-card">
+    <p class="title">{{ book.title }}</p>
+    <p class="author">by {{ book.author }}</p>
+    <p class="sets">Sets:
+    {% for set in book.sets %}
+        <a href="{{ url_for('view_set', set_id=set.id) }}">{ {{ set.title }} }</a>
+    {% endfor %}
+    <p><a href="{{ book.url }}">{{ book.url }}</a></p>
+</div>
+{% endmacro %}

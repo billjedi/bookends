@@ -1,5 +1,24 @@
+{%- from "macros.html" import book_card with context -%}
 {% extends "layout.html" %}
 
 {% block body %}
-Hello, world! I am signed in.
+<div class="row header">
+    <img src="http://gravatar.com/avatar/659a0b8510b00b6c7854d148f5630695" /><span class="welcome">Welcome back, Robert!</span>
+</div>
+<div class="row">
+    <div class="col-5">
+        <h2><small>You are</small><br>Excited<br><small>about&hellip;</small></h2>
+        <hr>
+        {% for book in books_excited %}
+            {{ book_card(book) }}
+        {% endfor %}
+    </div>
+    <div class="col-11">
+        <h2><small>Your</small><br>Archive<br><small>contains&hellip;</small></h2>
+        <hr>
+        {% for book in current_user.books %}
+            {{ book_card(book) }}
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

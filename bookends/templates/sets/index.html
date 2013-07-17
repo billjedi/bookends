@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-Hello, world!
+    {% for set in sets %}
+        <a href="{{ url_for('view_set', set_id=set.id) }}">{ {{ set.title }} }</a><br>
+    {% endfor %}
 {% endblock %}

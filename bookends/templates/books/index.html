@@ -1,5 +1,8 @@
+{%- from "macros.html" import book_card with context -%}
 {% extends "layout.html" %}
 
 {% block body %}
-Hello, world!
+{% for book in books %}
+    {{ book_card(book) }}
+{% endfor %}
 {% endblock %}

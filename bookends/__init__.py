@@ -14,7 +14,7 @@ bcrypt = Bcrypt(app)
 
 from . import views
 
-from .models import User
+from .models import User, Book, Set
 
 login_manager = LoginManager()
 login_manager.init_app(app)

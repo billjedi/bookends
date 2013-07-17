@@ -1,5 +1,15 @@
 {% extends "layout.html" %}
 
 {% block body %}
-Hello, world!
+<form action="{{ url_for('add_book') }}" method="POST">
+    Title: <input type="text" name="title" /><br>
+    Author: <input type="text" name="author" /><br>
+    URL: <input type="text" name="url" /><br>
+    Sets: <input type="text" name="sets" /><br>
+    Excited: <input type="checkbox" name="excited" /><br>
+    Reading: <input type="checkbox" name="reading" /><br>
+    Finished: <input type="checkbox" name="finished" /><br>
+    {{ form.csrf_token }}
+    <input type="submit" value="Add book" />
+</form>
 {% endblock %}

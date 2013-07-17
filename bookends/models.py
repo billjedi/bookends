@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import render_template, url_for
 
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -5,9 +7,62 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from . import db, util, bcrypt, app
 
 
+sets = db.Table('sets',
+    db.Column('set_id', db.Integer, db.ForeignKey('set.id')),
+    db.Column('book_id', db.Integer, db.ForeignKey('book.id'))
+)
+
+
+class Set(db.Model):
+
+    __tablename__ = 'set'
+
+    # Columns
+
+    #-------------------------------------------------------------------------
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    title = db.Column(db.String(128))
+
+    date_added = db.Column(db.DateTime, default=datetime.utcnow())
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Book(db.Model):
+
+    __tablename__ = 'book'
+
+    # Columns
+
+    #-------------------------------------------------------------------------
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    title = db.Column(db.String(128))
+
+    author = db.Column(db.String(64))
+
+    url = db.Column(db.String(1024))
+
+    date_added = db.Column(db.DateTime, default=datetime.utcnow())
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    reading = db.Column(db.Boolean, default=False)
+
+    excited = db.Column(db.Boolean, default=False)
+
+    finished = db.Column(db.Boolean, default=False)
+
+    sets = db.relationship('Set', secondary=sets,
+        backref=db.backref('books', lazy='dynamic'))
+
+
 class User(db.Model):
 
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     # Columns
 
@@ -22,6 +77,12 @@ class User(db.Model):
     email_confirmed = db.Column(db.Boolean, default=False)
 
     active = db.Column(db.Boolean, default=True)
+
+    date_joined = db.Column(db.DateTime, default=datetime.utcnow())
+
+    books = db.relationship('Book', backref='user', lazy='dynamic')
+
+    sets = db.relationship('Set', backref='user', lazy='dynamic')
 
     #-------------------------------------------------------------------------
 

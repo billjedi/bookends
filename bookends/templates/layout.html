@@ -1,9 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/grid.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bookends.css') }}" />
     </head>
     <body>
-    {% block body %}
-    {% endblock %}
+        <div class="nav-bar">
+            <div class="row content">
+            <a href="{{ url_for('index') }}">{ Bookends }</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('books') }}" class="nav-link">Books</a> |
+                <a href="{{ url_for('add_book') }}" class="nav-link">Add book</a> |
+                <a href="{{ url_for('sets') }}" class="nav-link">Sets</a>
+            {% endif %}
+            </div>
+        </div>
+        <div class="row content">
+            {% block body %}
+            {% endblock %}
+        </div>
     </body>
 </html>

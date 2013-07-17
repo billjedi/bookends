@@ -1,6 +1,6 @@
 from wtforms.validators import ValidationError
 from flask.ext.wtf import ( Form, TextField, PasswordField, Required, Email,
-                            Length )
+                            Length, BooleanField)
 
 from .models import User
 
@@ -51,3 +51,14 @@ class SignInForm(Form):
 
     email       = TextField('Email', validators=[Required(), Email()])
     password    = PasswordField('Password', validators=[Required()])
+
+
+class AddBookForm(Form):
+
+    title = TextField('Title', validators=[Required(), Length(0,128)])
+    author = TextField('Author', validators=[Length(0,64)])
+    url = TextField('URL', validators=[Length(0,1024)])
+    sets = TextField('Sets')
+    excited = BooleanField('Excited')
+    reading = BooleanField('Reading')
+    finished = BooleanField('Finished')
