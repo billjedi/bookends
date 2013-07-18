@@ -25,11 +25,15 @@ def index():
 
 @app.route('/about')
 def about():
+    """Tell a little about the site."""
+
     return render_template("about.html")
 
 
 @app.route('/accounts/create', methods=["GET", "POST"])
 def create_account():
+    """Create a new account."""
+
     form = AccountCreateForm()
     if form.validate_on_submit():
         user = User(
@@ -49,6 +53,7 @@ def create_account():
 
 @app.route('/accounts/activate/<token>')
 def activate_account(token):
+    """Activate the account by confirming their email address."""
     try:
         email = util.ts.loads(token, salt="activation-key", max_age=86400)
     except:
@@ -73,6 +78,8 @@ def activate_account(token):
 
 @app.route('/accounts/recover', methods=["GET", "POST"])
 def recover_account():
+    """Request an account recovery token to reset the password."""
+
     form = AccountRecoverForm()
     if form.validate_on_submit():
         user = User.get(email=form.email.data)
@@ -88,6 +95,8 @@ def recover_account():
 
 @app.route('/accounts/recover/<token>', methods=["GET", "POST"])
 def recover_account_with_token(token):
+    """Let the user enter a new password if they have a valid token."""
+
     try:
         email = util.ts.loads(token, salt="recover-key", max_age=86400)
     except:
@@ -115,6 +124,8 @@ def recover_account_with_token(token):
 
 @app.route('/signin', methods=["POST", "GET"])
 def signin():
+    """Authenticate a user."""
+
     form = SignInForm()
 
     if form.validate_on_submit():
@@ -150,6 +161,8 @@ def books():
 @login_required
 @app.route('/books/add', methods=["GET", "POST"])
 def add_book():
+    """Add a book."""
+
     form = AddBookForm()
 
     if form.validate_on_submit():
@@ -200,12 +213,16 @@ def edit_book(book_id):
 @login_required
 @app.route('/sets')
 def sets():
+    """List all of a user's sets."""
+
     return render_template('/sets/index.html', sets=current_user.sets)
 
 
 @login_required
 @app.route('/sets/view/<int:set_id>')
 def view_set(set_id):
+    """View all of the books in a given set."""
+
     set = current_user.sets.filter_by(id=set_id).first_or_404()
 
     return render_template('/sets/view.html', set=set)

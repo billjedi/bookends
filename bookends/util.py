@@ -1,3 +1,5 @@
+import md5
+
 from flask import flash
 from itsdangerous import URLSafeTimedSerializer
 import mandrill
@@ -30,3 +32,12 @@ def send_email(to_email, subject, html):
     result = mandrill_client.messages.send(message=message)
 
     return result
+
+def md5hash(string):
+    """Return the hex digest of an MD5 hash of a string (for Gravatar)."""
+
+    m = md5.new()
+
+    m.update(string)
+
+    return m.hexdigest()
