@@ -16,7 +16,7 @@
 {% else %}
     {% for item in list[:-1] %}
         <em>{{ item }}</em>
-        {{ ", " }}
+        {{- ", " }}
     {% endfor %}
     and
     <em>{{ list[-1] }}</em>
