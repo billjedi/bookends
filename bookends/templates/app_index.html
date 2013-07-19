@@ -1,10 +1,10 @@
 {%- from "macros.html" import book_card, list_to_string with context -%}
-{% extends "layout.html" %}
+{% extends "app_layout.html" %}
 
 {% block body %}
 <div class="grid-container">
 
-    <h1>You are currently reading {{ list_to_string(["apples","oranges", "bananas"])|trim }}.</h1>
+    <h1>You are currently reading {{ list_to_string(books_reading)|trim }}.</h1>
 
     <div class="grid-33">
         <h2><small>Books you're</small><br>Excited<br><small>about&hellip;</small></h2>
@@ -17,7 +17,7 @@
     <div class="grid-33">
         <h2><small>Recently</small><br>Added<br><small>books&hellip;</small></h2>
         <hr>
-        {% for book in current_user.books %}
+        {% for book in current_user.books[:4] %}
             {{ book_card(book) }}
         {% endfor %}
     </div>
@@ -25,8 +25,8 @@
     <div class="grid-33">
         <h2><small>Some</small><br>Sets<br><small>you've created&hellip;</small></h2>
         <hr>
-        {% for book in current_user.books %}
-            {{ book_card(book) }}
+        {% for set in current_user.sets %}
+            {{ set.title }}
         {% endfor %}
     </div>
 

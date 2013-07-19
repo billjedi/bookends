@@ -2,7 +2,7 @@ import re
 
 from flask import render_template, flash, redirect, url_for, abort
 
-from flask.ext.login import login_required, login_user, current_user
+from flask.ext.login import login_required, login_user, current_user, logout_user
 
 from . import app, db, util
 from .forms import (AccountCreateForm, AccountRecoverForm,
@@ -16,11 +16,12 @@ def index():
     """ Home page when anonymous, dashboard when authenticated. """
 
     if current_user.is_anonymous():
-        return render_template("index.html")
+        return render_template("home_index.html")
 
     return render_template(
-        "user_index.html",
-        books_excited=Book.query.filter_by(user_id=current_user.id, excited=True)
+        "app_index.html",
+        books_excited=Book.query.filter_by(user_id=current_user.id, excited=True),
+        books_reading=[book.title for book in Book.query.filter_by(user_id=current_user.id, reading=True)]
     )
 
 
@@ -148,7 +149,8 @@ def signin():
 @login_required
 @app.route('/signout')
 def signout():
-    pass
+    logout_user()
+    return redirect(url_for('index'))
 
 
 @login_required

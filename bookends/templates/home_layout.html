@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1;"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/unsemantic.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bookends.css') }}" />
+    </head>
+    <body>
+        <div class="row">
+            <div id="navigation" class="grid-20">
+                <!-- LOGO / AVATAR !-->
+                <!-- HOME !-->
+                <!-- ADD A BOOK !-->
+                <!-- BROWSE BOOKS !-->
+                <!-- BROWSE SETS !-->
+                <!-- ACCOUNT !-->
+                <p>Test</p>
+            </div>
+            <div id="content-area" class="grid-80">
+            {% block body %}
+            {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
