@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1;"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/grid.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/unsemantic.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bookends.css') }}" />
     </head>
     <body>
-        <div class="nav-bar">
-            <div class="row content">
-            <a href="{{ url_for('index') }}">{ Bookends }</a>
-            {% if current_user.is_authenticated() %}
-                <a href="{{ url_for('books') }}" class="nav-link">Books</a> |
-                <a href="{{ url_for('add_book') }}" class="nav-link">Add book</a> |
-                <a href="{{ url_for('sets') }}" class="nav-link">Sets</a>
-            {% endif %}
+        <div class="row">
+            <div id="navigation" class="grid-20">
+                <!-- LOGO / AVATAR !-->
+                <!-- HOME !-->
+                <!-- ADD A BOOK !-->
+                <!-- BROWSE BOOKS !-->
+                <!-- BROWSE SETS !-->
+                <!-- ACCOUNT !-->
+                <p>Test</p>
             </div>
-        </div>
-        <div class="row content">
+            <div id="content-area" class="grid-80">
             {% block body %}
             {% endblock %}
+            </div>
         </div>
     </body>
 </html>

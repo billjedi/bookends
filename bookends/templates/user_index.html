@@ -1,24 +1,34 @@
-{%- from "macros.html" import book_card with context -%}
+{%- from "macros.html" import book_card, list_to_string with context -%}
 {% extends "layout.html" %}
 
 {% block body %}
-<div class="row header">
-    <img src="{{ current_user.get_gravatar_url() }}" /><span class="welcome">It's great to see you again!</span>
-</div>
-<div class="row">
-    <div class="col-5">
-        <h2><small>You are</small><br>Excited<br><small>about&hellip;</small></h2>
+<div class="grid-container">
+
+    <h1>You are currently reading {{ list_to_string(["Game Engine Architecture", "The Elements of Typography", "Harry Potter and the Goblet of Fire"]) }}.</h1>
+
+    <div class="grid-33">
+        <h2><small>Books you're</small><br>Excited<br><small>about&hellip;</small></h2>
         <hr>
         {% for book in books_excited %}
             {{ book_card(book) }}
         {% endfor %}
     </div>
-    <div class="col-11">
-        <h2><small>Your</small><br>Archive<br><small>contains&hellip;</small></h2>
+
+    <div class="grid-33">
+        <h2><small>Recently</small><br>Added<br><small>books&hellip;</small></h2>
         <hr>
         {% for book in current_user.books %}
             {{ book_card(book) }}
         {% endfor %}
     </div>
+
+    <div class="grid-33">
+        <h2><small>Some</small><br>Sets<br><small>you've created&hellip;</small></h2>
+        <hr>
+        {% for book in current_user.books %}
+            {{ book_card(book) }}
+        {% endfor %}
+    </div>
+
 </div>
 {% endblock %}
