@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
-Hello, world!
+<form action="{{ url_for('account_email') }}" method="POST">
+    Email: <input type="text" name="email" value="{{ current_user.email }}" /><br>
+    {{ form.csrf_token }}
+    <input type="submit" value="Update email" />
+</form>
 {% endblock %}

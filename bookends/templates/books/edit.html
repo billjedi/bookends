@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form action="{{ url_for('edit_book', book_id=book.id) }}" method="POST">
+    Title: <input type="text" name="title" value="{{ book.title }}"/><br>
+    Author: <input type="text" name="author" value="{{ book.author }}"/><br>
+    URL: <input type="text" name="url" value="{{ book.url }}"/><br>
+    Sets: <input type="text" name="sets" value="{% for set in book.sets %}{{ '{' }}{{ set.title }}{{ '}' }} {% endfor %}"/><br>
+    Excited: <input type="checkbox" name="excited" {% if book.excited %}checked{% endif %}/><br>
+    Reading: <input type="checkbox" name="reading" {% if book.reading %}checked{% endif %}/><br>
+    Finished: <input type="checkbox" name="finished" {% if book.finished %}checked{% endif %}/><br>
+    {{ form.csrf_token }}
+    <input type="submit" value="Make changes" />
+</form>
+{% endblock %}

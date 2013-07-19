@@ -40,7 +40,7 @@ class AccountRecoverForm(Form):
     email       = TextField('Email', validators=[Required(), Email()])
 
 
-class AccountRecoverWithTokenForm(Form):
+class ChangePasswordForm(Form):
     """ The form to choose a new password. """
 
     password    = PasswordField('Password', validators=[Required()])
@@ -53,7 +53,7 @@ class SignInForm(Form):
     password    = PasswordField('Password', validators=[Required()])
 
 
-class AddBookForm(Form):
+class AddEditBookForm(Form):
 
     title = TextField('Title', validators=[Required(), Length(0,128)])
     author = TextField('Author', validators=[Length(0,64)])
@@ -62,3 +62,9 @@ class AddBookForm(Form):
     excited = BooleanField('Excited')
     reading = BooleanField('Reading')
     finished = BooleanField('Finished')
+
+
+class ChangeEmailForm(Form):
+    """ The form to request an email update. """
+
+    email       = TextField('Email', validators=[Required(), Email()])

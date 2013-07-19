@@ -6,7 +6,8 @@ from flask.ext.login import login_required, login_user, current_user
 
 from . import app, db, util
 from .forms import (AccountCreateForm, AccountRecoverForm,
-                    AccountRecoverWithTokenForm, SignInForm, AddBookForm)
+                    ChangePasswordForm, SignInForm, AddEditBookForm,
+                    ChangeEmailForm )
 from .models import User, Book, Set
 
 
@@ -102,7 +103,7 @@ def recover_account_with_token(token):
     except:
         return abort(404)
 
-    form = AccountRecoverWithTokenForm()
+    form = ChangePasswordForm()
 
     if form.validate_on_submit():
         user = User.get(email=email)
@@ -163,7 +164,7 @@ def books():
 def add_book():
     """Add a book."""
 
-    form = AddBookForm()
+    form = AddEditBookForm()
 
     if form.validate_on_submit():
 
@@ -205,9 +206,38 @@ def add_book():
 
 
 @login_required
-@app.route('/books/edit/<int:book_id>')
+@app.route('/books/edit/<int:book_id>', methods=["GET", "POST"])
 def edit_book(book_id):
-    pass
+    """Edit the book with a given id.
+
+    Make sure that the book belongs to this user!
+
+    """
+
+    book = Book().query.filter_by(
+        id=book_id,
+        user_id=current_user.id
+    ).first_or_404()
+
+    form = AddEditBookForm()
+
+    if form.validate_on_submit():
+
+        book.title = form.title.data
+        book.author = form.author.data
+        book.url = form.url.data
+        book.excited = form.excited.data
+        book.reading = form.reading.data
+        book.finished = form.finished.data
+
+        db.session.add(book)
+        db.session.commit()
+
+        flash("<em>" + book.title + "</em> was updated")
+
+        return redirect(url_for('index'))
+
+    return render_template('books/edit.html', book=book, form=form)
 
 
 @login_required
@@ -229,21 +259,53 @@ def view_set(set_id):
 
 
 @login_required
-@app.route('/accounts/password')
+@app.route('/accounts/password', methods=["GET", "POST"])
 def account_password():
-    pass
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        current_user.password = form.password.data
+
+        db.session.add(current_user)
+        db.session.commit()
+
+        flash("Your password has been updated")
+
+        return redirect(url_for('account_password'))
+
+    return render_template("accounts/password.html", form=form)
 
 
 @login_required
-@app.route('/accounts/email')
+@app.route('/accounts/email', methods=["GET", "POST"])
 def account_email():
-    pass
+    form = ChangeEmailForm()
 
+    if form.validate_on_submit():
+        current_user.send_email_update_email(form.email.data)
+
+        flash("Check your new email address to confirm the update.")
+
+        return redirect(url_for('index'))
+
+    return render_template('accounts/email.html', form=form)
 
 @login_required
-@app.route('/accounts/cancel')
-def account_cancel():
-    pass
+@app.route('/accounts/email/update/<token>')
+def account_email_update(token):
+    try:
+        email = util.ts.loads(token, salt="email-update-key", max_age=86400)
+    except:
+        return abort(404)
+
+    current_user.email = email
+
+    db.session.add(current_user)
+    db.session.commit()
+
+    flash("Your email has been updated")
+
+    return redirect(url_for('index'))
 
 
 @login_required

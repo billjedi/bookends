@@ -144,6 +144,29 @@ class User(db.Model):
             subject,
             html)
 
+    def send_email_update_email(self, new_email):
+
+        """ Send the email update email for a user """
+
+        subject = "Confirm your new email address on Bookends"
+
+        token = util.ts.dumps(new_email, salt='email-update-key')
+
+        email_update_url = url_for(
+            'account_email_update',
+            token=token,
+            _external=True)
+
+        html = render_template(
+            'email/email_update.html',
+            user=self,
+            email_update_url=email_update_url)
+
+        return util.send_email(
+            new_email,
+            subject,
+            html)
+
     def send_recover_email(self):
 
         subject = "Reset your Bookends password"
