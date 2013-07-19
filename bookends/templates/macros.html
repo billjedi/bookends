@@ -22,3 +22,19 @@
     <em>{{ list[-1] }}</em>
 {% endif %}
 {% endmacro %}
+
+{% macro nav_link(endpoint, text, account=False) %}
+{% if account %}
+    {%- if request.endpoint.count('account') %}
+        <a href="{{ url_for(endpoint) }}"><li class="nav-link nav-active">{{text}}</li></a>
+    {% else %}
+        <a href="{{ url_for(endpoint) }}"><li class="nav-link">{{text}}</li></a>
+    {% endif %}
+{% else %}
+    {%- if request.endpoint.endswith(endpoint) %}
+        <a href="{{ url_for(endpoint) }}"><li class="nav-link nav-active">{{text}}</li></a>
+    {% else %}
+        <a href="{{ url_for(endpoint) }}"><li class="nav-link">{{text}}</li></a>
+    {%- endif %}
+{% endif %}
+{% endmacro %}

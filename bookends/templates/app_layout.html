@@ -1,3 +1,4 @@
+{%- from "macros.html" import nav_link with context -%}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,20 +8,19 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bookends.css') }}" />
     </head>
     <body>
-        <div class="row">
-            <div id="navigation" class="grid-20">
-                <!-- LOGO / AVATAR !-->
-                <!-- HOME !-->
-                <!-- ADD A BOOK !-->
-                <!-- BROWSE BOOKS !-->
-                <!-- BROWSE SETS !-->
-                <!-- ACCOUNT !-->
-                <p>Test</p>
-            </div>
-            <div id="content-area" class="grid-80">
-            {% block body %}
-            {% endblock %}
-            </div>
+        <div id="navigation" class="grid-20">
+            <p id="branding-text">{ Bookends }</p>
+            <ul id="nav">
+                {{ nav_link('index', 'Home') }}
+                {{ nav_link('add_book', 'Add a book') }}
+                {{ nav_link('books', 'Browse books') }}
+                {{ nav_link('sets', 'Browse sets') }}
+                {{ nav_link('account_email', 'Account', account=True) }}
+            </ul>
+        </div>
+        <div id="content-area" class="grid-80">
+        {% block body %}
+        {% endblock %}
         </div>
     </body>
 </html>
