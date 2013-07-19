@@ -2,14 +2,32 @@
 
 {% block body %}
 <form action="{{ url_for('add_book') }}" method="POST">
-    Title: <input type="text" name="title" /><br>
-    Author: <input type="text" name="author" /><br>
-    URL: <input type="text" name="url" /><br>
-    Sets: <input type="text" name="sets" /><br>
-    Excited: <input type="checkbox" name="excited" /><br>
-    Reading: <input type="checkbox" name="reading" /><br>
-    Finished: <input type="checkbox" name="finished" /><br>
+    <input type="text" name="title" placeholder="title" /><br>
+    <input type="text" name="author" placeholder="author"/><br>
+    <input type="text" name="url" placeholder="url" /><br>
+    <input type="text" name="sets" placeholder="{sets}" /><br>
+
+    <br>
+
+    <div>
+        <input type="checkbox" id="excited" name="excited" class="switch" />
+        <label for="excited">Excited</label><br><br>
+    </div>
+
+    <div>
+        <input type="checkbox" id="reading" name="reading" class="switch" />
+        <label for="reading">Reading</label><br><br>
+    </div>
+
+    <div>
+        <input type="checkbox" id="finished" name="finished" class="switch" />
+        <label for="finished">Finished</label>
+    </div>
+
     {{ form.csrf_token }}
+
+    <br>
+    <br>
     <input type="submit" value="Add book" />
 </form>
 {% endblock %}

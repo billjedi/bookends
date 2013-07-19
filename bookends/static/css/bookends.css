@@ -47,6 +47,82 @@ a:hover {
     border-bottom: 1px dotted;
 }
 
+form, form input {
+    font-size: 2em;
+    margin: .2em;
+}
+
+form input[type=text] {
+    max-width: 90%;
+    border: none;
+    border-radius: 7px;
+    color: #444;
+}
+
+form input[type=submit] {
+    font-size: .7em;
+    padding: .7em;
+    background: #2ECC71;
+    color: #FFF;
+    border: none;
+    border-radius: 7px;
+}
+
+input.switch:empty
+{
+	margin-left: -999px;
+}
+
+input.switch:empty ~ label
+{
+    position: relative;
+    float: left;
+    line-height: 1.4em;
+    text-indent: 4em;
+    margin: 0.2em 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+input.switch:empty ~ label:before,
+input.switch:empty ~ label:after
+{
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: ' ';
+	width: 3.6em;
+	background-color: #e54a4f;
+	border-radius: 0.3em;
+	-webkit-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+}
+
+input.switch:empty ~ label:after
+{
+	width: 1.4em;
+	top: 0.1em;
+	bottom: 0.1em;
+	margin-left: 0.1em;
+	background-color: #fff;
+	border-radius: 0.15em;
+}
+
+input.switch:checked ~ label:before
+{
+    background: #2ECC71;
+}
+
+input.switch:checked ~ label:after
+{
+	margin-left: 2.1em;
+}
+
 .book-card {
     padding: 10px 0;
     line-height: 1.2em;

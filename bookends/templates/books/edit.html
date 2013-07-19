@@ -2,14 +2,32 @@
 
 {% block body %}
 <form action="{{ url_for('edit_book', book_id=book.id) }}" method="POST">
-    Title: <input type="text" name="title" value="{{ book.title }}"/><br>
-    Author: <input type="text" name="author" value="{{ book.author }}"/><br>
-    URL: <input type="text" name="url" value="{{ book.url }}"/><br>
-    Sets: <input type="text" name="sets" value="{% for set in book.sets %}{{ '{' }}{{ set.title }}{{ '}' }} {% endfor %}"/><br>
-    Excited: <input type="checkbox" name="excited" {% if book.excited %}checked{% endif %}/><br>
-    Reading: <input type="checkbox" name="reading" {% if book.reading %}checked{% endif %}/><br>
-    Finished: <input type="checkbox" name="finished" {% if book.finished %}checked{% endif %}/><br>
+    <input type="text" name="title" placeholder="title" value="{{ book.title }}" /><br>
+    <input type="text" name="author" placeholder="author" value="{{ book.author }}" /><br>
+    <input type="text" name="url" placeholder="url" value="{{ book.url }}" /><br>
+    <input type="text" name="sets" placeholder="{sets}" value="{% for set in book.sets %}{{ '{' }}{{ set.title }}{{ '}' }} {% endfor %}" /><br>
+
+    <br>
+
+    <div>
+        <input type="checkbox" id="excited" name="excited" class="switch" {% if book.excited %}checked{% endif %}/>
+        <label for="excited">Excited</label><br><br>
+    </div>
+
+    <div>
+        <input type="checkbox" id="reading" name="reading" class="switch" {% if book.reading %}checked{% endif %}/>
+        <label for="reading">Reading</label><br><br>
+    </div>
+
+    <div>
+        <input type="checkbox" id="finished" name="finished" class="switch" {% if book.finished %}checked{% endif %}/>
+        <label for="finished">Finished</label>
+    </div>
+
     {{ form.csrf_token }}
+
+    <br>
+    <br>
     <input type="submit" value="Make changes" />
 </form>
 {% endblock %}
