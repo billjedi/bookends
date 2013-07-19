@@ -2,7 +2,7 @@
 
 {% block body %}
 <form action="{{ url_for('account_email') }}" method="POST">
-    Email: <input type="text" name="email" value="{{ current_user.email }}" /><br>
+    <input type="text" name="email" placeholder="New email address"/><br>
     {{ form.csrf_token }}
     <input type="submit" value="Update email" />
 </form>

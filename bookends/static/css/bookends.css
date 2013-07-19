@@ -50,9 +50,11 @@ a:hover {
 form, form input {
     font-size: 2em;
     margin: .2em;
+    font-family: "Crimson Text", serif;
 }
 
-form input[type=text] {
+form input[type=text],
+form input[type=password]{
     max-width: 90%;
     border: none;
     border-radius: 7px;
@@ -66,6 +68,7 @@ form input[type=submit] {
     color: #FFF;
     border: none;
     border-radius: 7px;
+    cursor: pointer;
 }
 
 input.switch:empty
