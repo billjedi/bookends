@@ -148,6 +148,11 @@ input.switch:checked ~ label:after
     font-size: 1.6em;
 }
 
+.smallcaps {
+    text-transform: uppercase;
+    font-size: .8em;
+}
+
 .nav-link {
     font-size: 2em;
     border: none;
