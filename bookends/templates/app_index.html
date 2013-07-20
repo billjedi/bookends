@@ -1,11 +1,11 @@
-{%- from "macros.html" import book_card, list_to_string with context -%}
+{%- from "macros.html" import book_card, set_card, book_list_to_string with context -%}
 {% extends "app_layout.html" %}
 
 {% block body %}
 <div class="grid-container">
 
     {% if books_reading|length %}
-    <h1>You are currently reading {{ list_to_string(books_reading)|trim }}.</h1>
+    <h1>You are currently reading {{ book_list_to_string(books_reading)|trim }}.</h1>
     {% else %}
     <h1>You're not reading any books right now.</h1>
     {% endif %}
@@ -30,7 +30,7 @@
         <h2><small>Some</small><br>Sets<br><small>you've created&hellip;</small></h2>
         <hr>
         {% for set in current_user.sets %}
-            {{ set.title }}
+            {{ set_card(set) }}
         {% endfor %}
     </div>
 

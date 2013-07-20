@@ -44,7 +44,6 @@ a:visited,
 a:hover {
     color: #e54a4f;
     text-decoration: none;
-    border-bottom: 1px dotted;
 }
 
 form, form input {
@@ -127,17 +126,26 @@ input.switch:checked ~ label:after
 }
 
 .book-card {
-    padding: 10px 0;
+    padding: .5em 0;
     line-height: 1.2em;
     border-bottom: 1px dashed #e54a4f;
 }
 
 .book-card .title {
     font-style: italic;
+    font-size: 1.6em;
 }
 
 .book-card .author {
     padding-left: 5px;
+}
+
+.book-card .sets {
+    font-size: 1.2em;
+}
+
+.set-card .set-title {
+    font-size: 1.6em;
 }
 
 .nav-link {

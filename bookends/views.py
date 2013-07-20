@@ -21,7 +21,7 @@ def index():
     return render_template(
         "app_index.html",
         books_excited=Book.query.filter_by(user_id=current_user.id, excited=True),
-        books_reading=[book.title for book in Book.query.filter_by(user_id=current_user.id, reading=True)]
+        books_reading=Book.query.filter_by(user_id=current_user.id, reading=True).all()
     )
 
 
@@ -146,23 +146,23 @@ def signin():
     return render_template('signin.html', form=form)
 
 
-@login_required
 @app.route('/signout')
+@login_required
 def signout():
     logout_user()
     return redirect(url_for('index'))
 
 
-@login_required
 @app.route('/books')
+@login_required
 def books():
     """ List the current user's books. """
 
     return render_template('books/index.html', books=current_user.books)
 
 
-@login_required
 @app.route('/books/add', methods=["GET", "POST"])
+@login_required
 def add_book():
     """Add a book."""
 
@@ -207,8 +207,8 @@ def add_book():
     return render_template('books/add.html', form=form)
 
 
-@login_required
 @app.route('/books/edit/<int:book_id>', methods=["GET", "POST"])
+@login_required
 def edit_book(book_id):
     """Edit the book with a given id.
 
@@ -242,16 +242,16 @@ def edit_book(book_id):
     return render_template('books/edit.html', book=book, form=form)
 
 
-@login_required
 @app.route('/sets')
+@login_required
 def sets():
     """List all of a user's sets."""
 
     return render_template('/sets/index.html', sets=current_user.sets)
 
 
-@login_required
 @app.route('/sets/view/<int:set_id>')
+@login_required
 def view_set(set_id):
     """View all of the books in a given set."""
 
@@ -260,8 +260,8 @@ def view_set(set_id):
     return render_template('/sets/view.html', set=set)
 
 
-@login_required
 @app.route('/accounts/password', methods=["GET", "POST"])
+@login_required
 def account_password():
     form = ChangePasswordForm()
 
@@ -278,8 +278,8 @@ def account_password():
     return render_template("accounts/password.html", form=form)
 
 
-@login_required
 @app.route('/accounts/email', methods=["GET", "POST"])
+@login_required
 def account_email():
     form = ChangeEmailForm()
 
@@ -292,8 +292,8 @@ def account_email():
 
     return render_template('accounts/email.html', form=form)
 
-@login_required
 @app.route('/accounts/email/update/<token>')
+@login_required
 def account_email_update(token):
     try:
         email = util.ts.loads(token, salt="email-update-key", max_age=86400)
@@ -310,7 +310,7 @@ def account_email_update(token):
     return redirect(url_for('index'))
 
 
-@login_required
 @app.route('/accounts/billing')
+@login_required
 def account_billing():
-    pass
+    return render_template('accounts/billing.html')

@@ -2,7 +2,10 @@
 {% extends "app_layout.html" %}
 
 {% block body %}
+<h2>Your books:</h2>
+<div class="grid-33">
 {% for book in books %}
     {{ book_card(book) }}
 {% endfor %}
+</div>
 {% endblock %}

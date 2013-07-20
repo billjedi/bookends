@@ -2,10 +2,12 @@
 {% extends "app_layout.html" %}
 
 {% block body %}
-<h2>{ {{ set.title }} }</h2>
+<h2>Books in { {{ set.title }} }:</h2>
 
+<div class="grid-33">
 {% for book in set.books %}
     {{ book_card(book) }}
 {% endfor %}
+</div>
 
 {% endblock %}

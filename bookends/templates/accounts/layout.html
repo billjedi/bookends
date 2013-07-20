@@ -1,0 +1,18 @@
+{%- from "macros.html" import nav_link with context -%}
+{% extends "app_layout.html" %}
+
+{% block body %}
+<div class="grid-20">
+    <ul id="account-nav">
+        {{ nav_link('account_email', 'Email') }}
+        {{ nav_link('account_password', 'Password') }}
+        {{ nav_link('account_billing', 'Billing') }}
+    </ul>
+</div>
+
+<div class="grid-80">
+{% block account_body %}
+{% endblock %}
+</div>
+
+{% endblock %}

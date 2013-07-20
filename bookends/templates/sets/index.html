@@ -1,7 +1,9 @@
+{%- from "macros.html" import set_card with context -%}
 {% extends "app_layout.html" %}
 
 {% block body %}
+<h2>Your sets:</h2>
     {% for set in sets %}
-        <a href="{{ url_for('view_set', set_id=set.id) }}">{ {{ set.title }} }</a><br>
+        {{ set_card(set) }}
     {% endfor %}
 {% endblock %}
