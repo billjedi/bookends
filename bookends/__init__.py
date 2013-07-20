@@ -12,9 +12,9 @@ app.config.from_pyfile('config.py')
 
 class OrphanedSetListener(SessionExtension):
     def after_flush(self, session, ctx):
-        print "AFTER COMMIT"
         for set in Set().query.filter_by(user_id=current_user.id).all():
-            if not len(set.books.all()):
+            if len(set.books.all()) is 0:
+                print "DELETE"
                 session.delete(set)
 
 db = SQLAlchemy(app, session_extensions=[OrphanedSetListener()])
