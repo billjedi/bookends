@@ -48,7 +48,7 @@ a:hover {
 
 form, form input {
     font-size: 2em;
-    margin: .2em;
+    margin: .2em 0;
     font-family: "Crimson Text", serif;
 }
 
@@ -164,6 +164,10 @@ input.switch:checked ~ label:after
     color: #e54a4f;
 }
 
+.status {
+    margin-top: 1em;
+}
+
 #navigation {
     padding-left: 2%;
 }
@@ -171,4 +175,10 @@ input.switch:checked ~ label:after
 #branding-text {
     font-size: 3em;
     color: #e54a4f;
+}
+
+form input.delete-link {
+    background: #FFF;
+    color: #e54a4f;
+    font-size: .6em;
 }

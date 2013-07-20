@@ -30,4 +30,9 @@
     <br>
     <input type="submit" value="Make changes" />
 </form>
+
+<form action="{{ url_for('delete_book', book_id=book.id) }}" name="delete-form" method="POST">
+    {{ delete_form.csrf_token }}
+    <input type="submit" class="delete-link" value="Delete"/>
+</form>
 {% endblock %}

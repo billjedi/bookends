@@ -10,14 +10,7 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
-class OrphanedSetListener(SessionExtension):
-    def after_flush(self, session, ctx):
-        for set in Set().query.filter_by(user_id=current_user.id).all():
-            if len(set.books.all()) is 0:
-                print "DELETE"
-                session.delete(set)
-
-db = SQLAlchemy(app, session_extensions=[OrphanedSetListener()])
+db = SQLAlchemy(app)
 
 bcrypt = Bcrypt(app)
 

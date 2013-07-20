@@ -82,7 +82,6 @@ class Book(db.Model):
                 print existing_set.title
                 self.sets.append(existing_set)
             elif existing_set == None:
-                print "TWO"
                 new_set = Set(title=set_title, user_id=current_user.id)
                 self.sets.append(new_set)
 

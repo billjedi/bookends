@@ -5,7 +5,7 @@ from flask.ext.login import login_required, login_user, current_user, logout_use
 from . import app, db, util
 from .forms import (AccountCreateForm, AccountRecoverForm,
                     ChangePasswordForm, SignInForm, AddEditBookForm,
-                    ChangeEmailForm )
+                    ChangeEmailForm, DeleteBookForm )
 from .models import User, Book, Set
 
 
@@ -222,12 +222,27 @@ def edit_book(book_id):
 
         db.session.commit()
 
-        flash(book.title + " was updated")
+        flash(book.title + " was updated.")
 
         return redirect(url_for('index'))
 
-    return render_template('books/edit.html', book=book, form=form)
+    return render_template('books/edit.html', book=book, form=form, delete_form=DeleteBookForm())
 
+
+@app.route('/books/delete/<int:book_id>', methods=["POST"])
+@login_required
+def delete_book(book_id):
+    form = DeleteBookForm()
+
+    if form.validate_on_submit():
+        book = Book().query.filter_by(id=book_id, user_id=current_user.id).first_or_404()
+
+        db.session.delete(book)
+        db.session.commit()
+
+        flash(book.title + " was deleted.")
+
+    return redirect(url_for('index'))
 
 @app.route('/sets')
 @login_required
@@ -258,7 +273,7 @@ def account_password():
         db.session.add(current_user)
         db.session.commit()
 
-        flash("Your password has been updated")
+        flash("Your password has been updated.")
 
         return redirect(url_for('account_password'))
 
@@ -292,7 +307,7 @@ def account_email_update(token):
     db.session.add(current_user)
     db.session.commit()
 
-    flash("Your email has been updated")
+    flash("Your email has been updated.")
 
     return redirect(url_for('index'))
 

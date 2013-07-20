@@ -68,3 +68,7 @@ class ChangeEmailForm(Form):
     """ The form to request an email update. """
 
     email       = TextField('Email', validators=[Required(), Email()])
+
+class DeleteBookForm(Form):
+    """Form to delete a book with CSRF protection"""
+    pass
