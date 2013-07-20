@@ -20,6 +20,9 @@
             </ul>
         </div>
         <div id="content-area" class="grid-80">
+        {% for message in get_flashed_messages() %}
+            <p>{{ message }}</p>
+        {% endfor %}
         {% block body %}
         {% endblock %}
         </div>

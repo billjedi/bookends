@@ -5,7 +5,7 @@
     <input type="text" name="title" placeholder="{% if current_user.books.all()|length %}title{%else %}click here to enter the title{% endif %}" /><br>
     <input type="text" name="author" placeholder="author"/><br>
     <input type="text" name="url" placeholder="url (optional)" /><br>
-    <input type="text" name="sets" placeholder="{% if current_user.sets.all()|length %}{sets}{%else %}sets: {Harry Potter} {Magic}{% endif %}" /><br>
+    <input type="text" name="sets" placeholder="{% if current_user.get_sets()|length %}{sets}{%else %}sets: {Harry Potter} {Magic}{% endif %}" /><br>
 
     <br>
 

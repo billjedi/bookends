@@ -1,7 +1,9 @@
 from datetime import datetime
+import re
 
 from flask import render_template, url_for
 
+from flask.ext.login import current_user
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from . import db, util, bcrypt, app
@@ -57,8 +59,34 @@ class Book(db.Model):
     finished = db.Column(db.Boolean, default=False)
 
     sets = db.relationship('Set', secondary=sets,
-        backref=db.backref('books', lazy='dynamic'))
+        backref=db.backref( 'books', lazy='dynamic'))
 
+
+    def update_sets(self, set_list):
+
+        for set in self.sets:
+            self.sets.remove(set)
+
+        db.session.flush()
+
+        sets_given = re.findall(r"\{(.+?)\}", set_list)
+
+        for set_title in sets_given:
+
+            existing_set = Set().query.filter_by(
+                title=set_title,
+                user_id=current_user.id
+            ).first()
+
+            if existing_set and existing_set not in self.sets:
+                print existing_set.title
+                self.sets.append(existing_set)
+            elif existing_set == None:
+                print "TWO"
+                new_set = Set(title=set_title, user_id=current_user.id)
+                self.sets.append(new_set)
+
+        return
 
 class User(db.Model):
 
@@ -81,8 +109,6 @@ class User(db.Model):
     date_joined = db.Column(db.DateTime, default=datetime.utcnow())
 
     books = db.relationship('Book', backref='user', lazy='dynamic')
-
-    sets = db.relationship('Set', backref='user', lazy='dynamic')
 
     #-------------------------------------------------------------------------
 
@@ -230,3 +256,16 @@ class User(db.Model):
         """Calculates and returns the user's gravatar URL."""
 
         return "http://gravatar.com/avatar/" + util.md5hash(self.email)
+
+
+    def get_sets(self):
+        """Return a list of set objects"""
+
+        sets = []
+
+        for book in self.books:
+            for set in book.sets:
+                if set not in sets:
+                    sets.append(set)
+
+        return sets

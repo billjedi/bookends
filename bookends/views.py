@@ -1,5 +1,3 @@
-import re
-
 from flask import render_template, flash, redirect, url_for, abort
 
 from flask.ext.login import login_required, login_user, current_user, logout_user
@@ -179,28 +177,14 @@ def add_book():
             finished=form.finished.data
         )
 
-        sets_given = re.findall(r"\{(.+?)\}", form.sets.data)
-
-        for set_title in sets_given:
-
-            existing_set = Set().query.filter_by(
-                title=set_title,
-                user_id=current_user.id
-            ).first()
-
-            if existing_set:
-                book.sets.append(existing_set)
-            else:
-                new_set = Set(title=set_title)
-                current_user.sets.append(new_set)
-                book.sets.append(new_set)
+        book.update_sets(form.sets.data)
 
         current_user.books.append(book)
 
         db.session.add(current_user)
         db.session.commit()
 
-        flash("<em>" + book.title + "</em> has been added.")
+        flash(book.title + " has been added.")
 
         return redirect(url_for('add_book'))
 
@@ -232,10 +216,13 @@ def edit_book(book_id):
         book.reading = form.reading.data
         book.finished = form.finished.data
 
+        book.update_sets(form.sets.data)
+
         db.session.add(book)
+
         db.session.commit()
 
-        flash("<em>" + book.title + "</em> was updated")
+        flash(book.title + " was updated")
 
         return redirect(url_for('index'))
 
@@ -247,7 +234,7 @@ def edit_book(book_id):
 def sets():
     """List all of a user's sets."""
 
-    return render_template('/sets/index.html', sets=current_user.sets)
+    return render_template('/sets/index.html', sets=current_user.get_sets())
 
 
 @app.route('/sets/view/<int:set_id>')
@@ -255,7 +242,7 @@ def sets():
 def view_set(set_id):
     """View all of the books in a given set."""
 
-    set = current_user.sets.filter_by(id=set_id).first_or_404()
+    set = Set().query.filter_by(id=set_id, user_id=current_user.id).first_or_404()
 
     return render_template('/sets/view.html', set=set)
 

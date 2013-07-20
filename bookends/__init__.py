@@ -2,13 +2,22 @@ from flask import Flask
 
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, current_user
+
+from sqlalchemy.orm.interfaces import SessionExtension
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
-db = SQLAlchemy(app)
+class OrphanedSetListener(SessionExtension):
+    def after_flush(self, session, ctx):
+        print "AFTER COMMIT"
+        for set in Set().query.filter_by(user_id=current_user.id).all():
+            if not len(set.books.all()):
+                session.delete(set)
+
+db = SQLAlchemy(app, session_extensions=[OrphanedSetListener()])
 
 bcrypt = Bcrypt(app)
 
