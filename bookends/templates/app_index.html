@@ -29,7 +29,7 @@
     <div class="grid-33">
         <h2><small>Some</small><br>Sets<br><small>you've created&hellip;</small></h2>
         <hr>
-        {% for set in current_user.sets %}
+        {% for set in current_user.get_sets() %}
             {{ set_card(set) }}
         {% endfor %}
     </div>

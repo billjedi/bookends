@@ -19,10 +19,11 @@
 {% if list|length == 1 %}
     <a href="{{ url_for('edit_book', book_id=list[0].id) }}"><em>{{ list[0].title }}</em></a>
 {% else %}
-    {% for item in list[:-1] %}
+    {% for item in list[:-2] %}
         <a href="{{ url_for('edit_book', book_id=item.id) }}"><em>{{ item.title }}</em></a>
         {{- ", " }}
     {% endfor %}
+    <a href="{{ url_for('edit_book', book_id=list[-1].id) }}"><em>{{ list[-2].title }}</em></a>
     and
     <a href="{{ url_for('edit_book', book_id=list[-1].id) }}"><em>{{ list[-1].title }}</em></a>
 {% endif %}
