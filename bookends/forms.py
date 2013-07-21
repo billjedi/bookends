@@ -40,7 +40,7 @@ class AccountRecoverForm(Form):
     email       = TextField('Email', validators=[Required(), Email()])
 
 
-class ChangePasswordForm(Form):
+class PasswordForm(Form):
     """ The form to choose a new password. """
 
     password    = PasswordField('Password', validators=[Required()])

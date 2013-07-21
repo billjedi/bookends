@@ -1,10 +1,10 @@
 from flask import render_template, flash, redirect, url_for, abort
 
-from flask.ext.login import login_required, login_user, current_user, logout_user
+from flask.ext.login import login_required, login_user, current_user, logout_user, confirm_login, fresh_login_required
 
 from . import app, db, util
 from .forms import (AccountCreateForm, AccountRecoverForm,
-                    ChangePasswordForm, SignInForm, AddEditBookForm,
+                    PasswordForm, SignInForm, AddEditBookForm,
                     ChangeEmailForm, DeleteBookForm )
 from .models import User, Book, Set
 
@@ -102,7 +102,7 @@ def recover_account_with_token(token):
     except:
         return abort(404)
 
-    form = ChangePasswordForm()
+    form = PasswordForm()
 
     if form.validate_on_submit():
         user = User.get(email=email)
@@ -262,10 +262,26 @@ def view_set(set_id):
     return render_template('/sets/view.html', set=set)
 
 
-@app.route('/accounts/password', methods=["GET", "POST"])
+@app.route('/accounts/refresh', methods=["GET", "POST"])
 @login_required
+def refresh_login():
+    form = PasswordForm()
+
+    if form.validate_on_submit():
+        if current_user.check_password(form.password.data):
+            confirm_login()
+            return redirect(request.args.get("next") or url_for("index"))
+        else:
+            flash("Incorrect password.")
+            return redirect(url_for('refresh_login'))
+
+    return render_template('accounts/refresh.html', form=form)
+
+
+@app.route('/accounts/password', methods=["GET", "POST"])
+@fresh_login_required
 def account_password():
-    form = ChangePasswordForm()
+    form = PasswordForm()
 
     if form.validate_on_submit():
         current_user.password = form.password.data
@@ -281,7 +297,7 @@ def account_password():
 
 
 @app.route('/accounts/email', methods=["GET", "POST"])
-@login_required
+@fresh_login_required
 def account_email():
     form = ChangeEmailForm()
 
@@ -313,6 +329,6 @@ def account_email_update(token):
 
 
 @app.route('/accounts/billing')
-@login_required
+@fresh_login_required
 def account_billing():
     return render_template('accounts/billing.html')

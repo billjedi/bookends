@@ -4,10 +4,12 @@ Flask-Login==0.2.5
 Flask-SQLAlchemy==0.16
 Flask-WTF==0.8.3
 Jinja2==2.7
+Mako==0.8.1
 MarkupSafe==0.18
 SQLAlchemy==0.8.1
 WTForms==1.0.4
 Werkzeug==0.9.1
+alembic==0.6.0
 docopt==0.4.0
 itsdangerous==0.21
 mandrill==1.0.39

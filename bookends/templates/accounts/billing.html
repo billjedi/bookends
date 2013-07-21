@@ -1,5 +1,35 @@
 {% extends "accounts/layout.html" %}
 
 {% block account_body %}
-Hello, world!
+<form action="" method="POST" id="payment-form">
+    <input type="text" size="20" data-stripe="number" placeholder="Card number"/>
+
+    <input type="text" size="4" data-stripe="cvc" placeholder="CVC"/><br>
+
+    <input type="text" size="2" data-stripe="exp-month" placeholder="MM" /><br>
+
+    <input type="text" size="4" date-stripe="exp-year" placeholder="YYYY" /><br>
+
+    <input type="submit" value="Start paying $3.99/month" />
+
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+
+    <script type="text/javascript">
+        Stripe.setPublishableKey('pk_05JhtD9VJDW6bLo03nKM7RzkblcKA');
+
+        jQuery(function($) {
+            $('#payment-form').submit(function(event) {
+                var $form = $(this);
+
+                // Disable the submit button to prevent repeated clicks
+                $form.find('button').prop('disabled', true);
+
+                Stripe.createToken($form, stripeResponseHandler);
+
+                // Prevent the form from submitting with the default action
+                return false;
+            });
+        });
+    </script>
 {% endblock %}
