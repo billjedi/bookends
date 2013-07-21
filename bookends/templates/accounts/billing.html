@@ -10,7 +10,13 @@
 
     <input type="text" size="4" date-stripe="exp-year" placeholder="YYYY" /><br>
 
+
     <input type="submit" value="Start paying $3.99/month" />
+</form>
+
+<form action="" method="POST">
+
+    <input type="submit" class="delete-link" value="Cancel my account" />
 
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>

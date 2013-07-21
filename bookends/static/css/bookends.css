@@ -181,4 +181,6 @@ form input.delete-link {
     background: #FFF;
     color: #e54a4f;
     font-size: .6em;
+    margin: 1em;
+    padding: 0px;
 }

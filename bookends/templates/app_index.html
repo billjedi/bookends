@@ -11,7 +11,7 @@
     {% endif %}
 
     <div class="grid-33">
-        <h2><small>Books you're</small><br>Excited<br><small>about&hellip;</small></h2>
+        <h2>Exciting<br><small>books&hellip;</small></h2>
         <hr>
         {% for book in books_excited %}
             {{ book_card(book) }}
@@ -19,7 +19,7 @@
     </div>
 
     <div class="grid-33">
-        <h2><small>Recently</small><br>Added<br><small>books&hellip;</small></h2>
+        <h2>Recently<br><small>added&hellip;</small></h2>
         <hr>
         {% for book in current_user.books[:4] %}
             {{ book_card(book) }}
@@ -27,7 +27,7 @@
     </div>
 
     <div class="grid-33">
-        <h2><small>Some</small><br>Sets<br><small>you've created&hellip;</small></h2>
+        <h2>Sets<br><small>you've created&hellip;</small></h2>
         <hr>
         {% for set in current_user.get_sets()[:8] %}
             {{ set_card(set) }}
