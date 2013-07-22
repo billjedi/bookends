@@ -31,14 +31,14 @@
         {% endblock %}
         </div>
 
-        {% if current_user.books.all()|length == 0 and request.endpoint != 'add_book' %}
+        {% if current_user.books.all()|length == 0 and request.endpoint == 'index' %}
         <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
         <script type="text/javascript">
         $(document).ready(function() {
             window.setTimeout(animateAddBook, 2000);
 
             function animateAddBook() {
-                $('.add-book-link').addClass('animated tada');
+                $('.add-book-link').addClass('animated bounce');
             }
         });
         </script>
