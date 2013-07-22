@@ -279,12 +279,6 @@ class User(db.Model):
 
         return None
 
-    def get_gravatar_url(self):
-        """Calculates and returns the user's gravatar URL."""
-
-        return "http://gravatar.com/avatar/" + util.md5hash(self.email)
-
-
     def get_sets(self):
         """Return a list of set objects"""
 
