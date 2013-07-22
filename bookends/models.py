@@ -219,6 +219,28 @@ class User(db.Model):
             subject,
             html)
 
+    def send_charge_succeeded_email(self):
+
+        subject = "Your Bookends account was renewed"
+
+        html = render_tempate('email/charge_succeeded.html')
+
+        return util.send_email(
+            self.email,
+            subject,
+            html)
+
+    def send_charge_failed_email(self):
+
+        subject = "There's a problem with your Bookends account"
+
+        html = render_tempate('email/charge_failed.html')
+
+        return util.send_email(
+            self.email,
+            subject,
+            html)
+
     @classmethod
     def authenticate(cls, username, password):
 

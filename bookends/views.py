@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
+import json
 
-from flask import render_template, flash, redirect, url_for, abort
+from flask import render_template, flash, redirect, url_for, abort, request
 
 from flask.ext.login import login_required, login_user, current_user, logout_user, confirm_login, fresh_login_required
 
@@ -416,3 +417,26 @@ def account_billing_stop():
 @fresh_login_required
 def account_delete():
     pass
+
+
+@app.route('/_stripe/webhook', methods=["POST"])
+def stripe_webhook():
+    """This is the route posted to by Stripe on events."""
+
+    event = json.loads(request.data)
+
+    if event.type is 'charge.succeeded':
+        user = User().query.filter_by(stripe_id=event.customer).first_or_404()
+
+        user.account_expires = datetime.fromtimestamp(event.data.subscription.current_period_end)
+
+        db.sesion.add(user)
+        db.session.commit()
+
+        user.send_charge_succeeded_email()
+    elif event.type is 'charge.failed':
+        user = User().query.filter_by(stripe_id=event.customer).first_or_404()
+
+        user.send_charge_failed_email()
+
+    return abort(200)

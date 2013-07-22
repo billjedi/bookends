@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/unsemantic.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bookends.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}" />
         <title>Bookends</title>
     </head>
     <body>
@@ -13,7 +14,7 @@
             <p id="branding-text">{ Bookends }</p>
             <ul id="nav">
                 {{ nav_link('index', 'Home') }}
-                {{ nav_link('add_book', 'Add a book') }}
+                {{ nav_link('add_book', 'Add a book', classes="add-book-link") }}
                 {{ nav_link('books', 'Browse books') }}
                 {{ nav_link('sets', 'Browse sets') }}
                 {{ nav_link('account_email', 'Account', account=True) }}
@@ -29,5 +30,18 @@
         {% block body %}
         {% endblock %}
         </div>
+
+        {% if current_user.books.all()|length == 0 and request.endpoint != 'add_book' %}
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            window.setTimeout(animateAddBook, 2000);
+
+            function animateAddBook() {
+                $('.add-book-link').addClass('animated tada');
+            }
+        });
+        </script>
+        {% endif %}
     </body>
 </html>
