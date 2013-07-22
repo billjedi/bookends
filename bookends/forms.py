@@ -77,3 +77,7 @@ class BillingForm(Form):
     """Form containing Stripe token"""
 
     stripeToken = TextField('Stripe token', validators=[Required()])
+
+class StopBillingForm(Form):
+    """Form to stop billing"""
+    pass

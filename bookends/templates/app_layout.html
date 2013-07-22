@@ -21,7 +21,7 @@
             </ul>
         <div class="status">
         {% for message in get_flashed_messages() %}
-            <p>Status: {{ message }}</p>
+            <p>Status: {{ message|safe }}</p>
         {% endfor %}
         </div>
         </div>

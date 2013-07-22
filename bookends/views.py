@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import render_template, flash, redirect, url_for, abort
 
@@ -7,7 +7,7 @@ from flask.ext.login import login_required, login_user, current_user, logout_use
 from . import app, db, util, check_expired, stripe
 from .forms import (AccountCreateForm, AccountRecoverForm,
                     PasswordForm, SignInForm, AddEditBookForm,
-                    ChangeEmailForm, DeleteBookForm, BillingForm )
+                    ChangeEmailForm, DeleteBookForm, BillingForm, StopBillingForm )
 from .models import User, Book, Set
 
 
@@ -373,6 +373,7 @@ def account_billing():
 
         if customer:
             current_user.account_expires = datetime.fromtimestamp(customer.subscription.current_period_end)
+            current_user.card_last4 = customer.cards.data[0].last4
 
         db.session.add(current_user)
         db.session.commit()
@@ -383,14 +384,32 @@ def account_billing():
 
     card = None
 
-    if current_user.stripe_id:
+    if current_user.card_last4:
+        flash("Your current card ends in " + current_user.card_last4 + ".")
+
+    stop_form = StopBillingForm()
+
+    return render_template('accounts/billing.html', form=form, card=card, stripe_publishable_key=app.config["STRIPE_PUBLISHABLE_KEY"], stop_form=stop_form)
+
+
+@app.route('/accounts/billing/stop', methods=["POST"])
+@login_required
+def account_billing_stop():
+    form = StopBillingForm()
+
+    if form.validate_on_submit():
         customer = stripe.Customer.retrieve(current_user.stripe_id)
 
-        card = customer.cards.data[0]
+        customer.delete()
+        current_user.card_last4 = None
+        current_user.stripe_id = None
 
-        flash("Your current card is a " + card.type + " ending in " + card.last4 + ".")
+        db.session.add(current_user)
+        db.session.commit()
 
-    return render_template('accounts/billing.html', form=form, card=card, stripe_publishable_key=app.config["STRIPE_PUBLISHABLE_KEY"])
+        flash("Your payments have been stopped. Your account will expire in " + str((current_user.account_expires - datetime.utcnow()).days) + " days.")
+
+        return redirect(url_for('index'))
 
 
 @app.route('/accounts/delete', methods=["GET", "POST"])

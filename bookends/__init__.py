@@ -35,11 +35,11 @@ def check_expired(f):
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated():
             if datetime.utcnow() - current_user.account_expires > timedelta(days=7):
-                flash("It looks like it's time to update your billing information to keep using Bookends.")
+                flash("It looks like it's time to start paying for Bookends.")
                 return redirect(url_for('account_billing'))
             elif datetime.utcnow() > current_user.account_expires:
                 delta = timedelta(days=7) - (datetime.utcnow() - current_user.account_expires)
-                flash("You have " + str(delta.days) + " days until you have to update your billing information. You can always do it sooner though!")
+                flash("You have " + str(delta.days) + " days until you have to <a href='" + url_for('account_billing') + "'>start paying</a>.")
         return f(*args, **kwargs)
 
     return decorated_function

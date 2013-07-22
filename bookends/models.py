@@ -105,6 +105,8 @@ class User(db.Model):
 
     stripe_id = db.Column(db.String(64), default=None)
 
+    card_last4 = db.Column(db.String(4), default=None)
+
     active = db.Column(db.Boolean, default=True)
 
     date_joined = db.Column(db.DateTime, default=datetime.utcnow())

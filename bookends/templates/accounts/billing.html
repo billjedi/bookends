@@ -2,13 +2,13 @@
 
 {% block account_body %}
 <form action="" method="POST" id="payment-form">
-    <input type="text" size="20" data-stripe="number" placeholder="{% if card %}---- ---- ---- {{ card.last4 }}{% else %}Card number{% endif %}"/>
+    <input type="text" size="20" data-stripe="number" placeholder="{% if current_user.card_last4 %}---- ---- ---- {{ current_user.card_last4 }}{% else %}Card number{% endif %}"/>
 
     <input type="text" size="4" data-stripe="cvc" placeholder="CVC"/><br>
 
-    <input type="text" size="2" data-stripe="exp-month" placeholder="{% if card %}{{ (card.exp_month|string).zfill(2) }}{% else %}MM{% endif %}" /><br>
+    <input type="text" size="2" data-stripe="exp-month" placeholder="MM" /><br>
 
-    <input type="text" size="4" data-stripe="exp-year" placeholder="{% if card %}{{ card.exp_year}}{% else %}YYYY{% endif %}" /><br>
+    <input type="text" size="4" data-stripe="exp-year" placeholder="YYYY" /><br>
 
     {{ form.csrf_token }}
 
@@ -18,7 +18,8 @@
 </form>
 
 {% if current_user.stripe_id %}
-<form action="" method="POST">
+<form action="{{ url_for('account_billing_stop') }}" method="POST">
+    {{ stop_form.csrf_token }}
     <input type="submit" class="delete-link" value="Stop paying" />
 </form>
 {% endif %}
