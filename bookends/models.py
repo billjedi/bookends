@@ -107,6 +107,8 @@ class User(db.Model):
 
     date_joined = db.Column(db.DateTime, default=datetime.utcnow())
 
+    account_expires = db.Column(db.DateTime, default=datetime.utcnow())
+
     books = db.relationship('Book', backref='user', lazy='dynamic')
 
     #-------------------------------------------------------------------------

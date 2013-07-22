@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, abort
 
 from flask.ext.login import login_required, login_user, current_user, logout_user, confirm_login, fresh_login_required
 
-from . import app, db, util
+from . import app, db, util, check_expired
 from .forms import (AccountCreateForm, AccountRecoverForm,
                     PasswordForm, SignInForm, AddEditBookForm,
                     ChangeEmailForm, DeleteBookForm )
@@ -10,6 +10,7 @@ from .models import User, Book, Set
 
 
 @app.route('/')
+@check_expired
 def index():
     """ Home page when anonymous, dashboard when authenticated. """
 
@@ -153,6 +154,7 @@ def signout():
 
 @app.route('/books')
 @login_required
+@check_expired
 def books():
     """ List the current user's books. """
 
@@ -161,6 +163,7 @@ def books():
 
 @app.route('/books/add', methods=["GET", "POST"])
 @login_required
+@check_expired
 def add_book():
     """Add a book."""
 
@@ -193,6 +196,7 @@ def add_book():
 
 @app.route('/books/edit/<int:book_id>', methods=["GET", "POST"])
 @login_required
+@check_expired
 def edit_book(book_id):
     """Edit the book with a given id.
 
@@ -231,6 +235,7 @@ def edit_book(book_id):
 
 @app.route('/books/delete/<int:book_id>', methods=["POST"])
 @login_required
+@check_expired
 def delete_book(book_id):
     form = DeleteBookForm()
 
@@ -244,8 +249,10 @@ def delete_book(book_id):
 
     return redirect(url_for('index'))
 
+
 @app.route('/sets')
 @login_required
+@check_expired
 def sets():
     """List all of a user's sets."""
 
@@ -254,6 +261,7 @@ def sets():
 
 @app.route('/sets/view/<int:set_id>')
 @login_required
+@check_expired
 def view_set(set_id):
     """View all of the books in a given set."""
 

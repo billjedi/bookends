@@ -27,6 +27,10 @@ h2 small {
     font-style: italic;
 }
 
+hr {
+    border: 1px solid #444;
+}
+
 p {
     line-height: 1.56em;
 }
@@ -128,7 +132,6 @@ input.switch:checked ~ label:after
 .book-card {
     padding: .5em 0;
     line-height: 1.2em;
-    border-bottom: 1px dashed #e54a4f;
 }
 
 .book-card .title {
