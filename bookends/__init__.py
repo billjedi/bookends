@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from functools import wraps
+import stripe
 
 from flask import Flask, flash, redirect, url_for
 
@@ -17,21 +18,28 @@ db = SQLAlchemy(app)
 
 bcrypt = Bcrypt(app)
 
+stripe.api_key = app.config["STRIPE_API_KEY"]
+
 def check_expired(f):
     """
     A decorator to check that the user's account is active.
 
-    It will check that the user's account_expires date is no
-    more than 7 days in the past.
+    It will check that the user's account_expires date is no more than 7 days
+    in the past.
+
+    Flashes a message if the user is in the 7 day grace period.
 
     """
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated():
-            if datetime.utcnow() - current_user.account_expires > timedelta(seconds=7):
+            if datetime.utcnow() - current_user.account_expires > timedelta(days=7):
                 flash("It looks like it's time to update your billing information to keep using Bookends.")
                 return redirect(url_for('account_billing'))
+            elif datetime.utcnow() > current_user.account_expires:
+                delta = timedelta(days=7) - (datetime.utcnow() - current_user.account_expires)
+                flash("You have " + str(delta.days) + " days until you have to update your billing information. You can always do it sooner though!")
         return f(*args, **kwargs)
 
     return decorated_function

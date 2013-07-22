@@ -1,11 +1,13 @@
+from datetime import datetime
+
 from flask import render_template, flash, redirect, url_for, abort
 
 from flask.ext.login import login_required, login_user, current_user, logout_user, confirm_login, fresh_login_required
 
-from . import app, db, util, check_expired
+from . import app, db, util, check_expired, stripe
 from .forms import (AccountCreateForm, AccountRecoverForm,
                     PasswordForm, SignInForm, AddEditBookForm,
-                    ChangeEmailForm, DeleteBookForm )
+                    ChangeEmailForm, DeleteBookForm, BillingForm )
 from .models import User, Book, Set
 
 
@@ -336,7 +338,62 @@ def account_email_update(token):
     return redirect(url_for('index'))
 
 
-@app.route('/accounts/billing')
+@app.route('/accounts/billing', methods=["GET", "POST"])
 @fresh_login_required
 def account_billing():
-    return render_template('accounts/billing.html')
+    """
+    This is the route that starts billing the user.
+
+    They submit a form, then their information is turned into a Stripe token,
+    then that token is submitted here.
+
+    """
+
+    form = BillingForm()
+
+    if form.validate_on_submit():
+        token = form.stripeToken.data
+
+        customer = None
+
+        if current_user.stripe_id:
+            customer = stripe.Customer.retrieve(current_user.stripe_id)
+
+            customer.card = token
+
+            customer.save()
+        else:
+            customer = stripe.Customer.create(
+                card=token,
+                plan='bookends1',
+                email=current_user.email
+            )
+
+            current_user.stripe_id = customer.id
+
+        if customer:
+            current_user.account_expires = datetime.fromtimestamp(customer.subscription.current_period_end)
+
+        db.session.add(current_user)
+        db.session.commit()
+
+        flash("Your billing information has been updated!")
+
+        return redirect(url_for('index'))
+
+    card = None
+
+    if current_user.stripe_id:
+        customer = stripe.Customer.retrieve(current_user.stripe_id)
+
+        card = customer.cards.data[0]
+
+        flash("Your current card is a " + card.type + " ending in " + card.last4 + ".")
+
+    return render_template('accounts/billing.html', form=form, card=card, stripe_publishable_key=app.config["STRIPE_PUBLISHABLE_KEY"])
+
+
+@app.route('/accounts/delete', methods=["GET", "POST"])
+@fresh_login_required
+def account_delete():
+    pass

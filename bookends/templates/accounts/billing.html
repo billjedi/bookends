@@ -2,34 +2,72 @@
 
 {% block account_body %}
 <form action="" method="POST" id="payment-form">
-    <input type="text" size="20" data-stripe="number" placeholder="Card number"/>
+    <input type="text" size="20" data-stripe="number" placeholder="{% if card %}---- ---- ---- {{ card.last4 }}{% else %}Card number{% endif %}"/>
 
     <input type="text" size="4" data-stripe="cvc" placeholder="CVC"/><br>
 
-    <input type="text" size="2" data-stripe="exp-month" placeholder="MM" /><br>
+    <input type="text" size="2" data-stripe="exp-month" placeholder="{% if card %}{{ (card.exp_month|string).zfill(2) }}{% else %}MM{% endif %}" /><br>
 
-    <input type="text" size="4" date-stripe="exp-year" placeholder="YYYY" /><br>
+    <input type="text" size="4" data-stripe="exp-year" placeholder="{% if card %}{{ card.exp_year}}{% else %}YYYY{% endif %}" /><br>
 
+    {{ form.csrf_token }}
 
-    <input type="submit" value="Start paying $3.99/month" />
+    <p class="payment-errors"></p>
+
+    <input type="submit" value="Pay with this card ($3.99 / month)" />
 </form>
 
+{% if current_user.stripe_id %}
 <form action="" method="POST">
-
-    <input type="submit" class="delete-link" value="Cancel my account" />
+    <input type="submit" class="delete-link" value="Stop paying" />
+</form>
+{% endif %}
 
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.payment.js') }}"></script>
 
     <script type="text/javascript">
-        Stripe.setPublishableKey('pk_05JhtD9VJDW6bLo03nKM7RzkblcKA');
+        $('input[data-stripe="number"]').payment('formatCardNumber');
+        $('input[data-stripe="cvc"]').payment('formatCardCVC');
+        $('input[data-stripe="exp-month"]').payment('restrictNumeric');
+        $('input[data-stripe="exp-year"]').payment('restrictNumeric');
+
+        Stripe.setPublishableKey('{{ stripe_publishable_key }}');
+
+        var stripeResponseHandler = function(status, response) {
+            var $form = $('#payment-form');
+
+            if (response.error) {
+                // Show the errors on the form
+                $form.find('.payment-errors').text(response.error.message);
+                $form.find('input[type="submit"]').prop('disabled', false);
+                $form.find('input[type="submit"]').val('Pay with this card ($3.99 / month)');
+            } else {
+                // token contains id, last4, and card type
+                var token = response.id;
+                // Insert the token into the form so it gets submitted to the server
+                $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+                // and re-submit
+                $form.get(0).submit();
+            }
+        };
 
         jQuery(function($) {
             $('#payment-form').submit(function(event) {
                 var $form = $(this);
 
+                // Validate the card via jquery.payment
+
+                if (! $.payment.validateCardNumber($('input[data-stripe="number"]').val())) {
+                    $form.find('.payment-errors').text("That card number doesn't look right.");
+                    return false;
+                }
+
                 // Disable the submit button to prevent repeated clicks
-                $form.find('button').prop('disabled', true);
+                $form.find('input[type="submit"]').prop('disabled', true);
+
+                $form.find('input[type="submit"]').val('Working...');
 
                 Stripe.createToken($form, stripeResponseHandler);
 

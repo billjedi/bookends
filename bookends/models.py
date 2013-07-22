@@ -103,6 +103,8 @@ class User(db.Model):
 
     email_confirmed = db.Column(db.Boolean, default=False)
 
+    stripe_id = db.Column(db.String(64), default=None)
+
     active = db.Column(db.Boolean, default=True)
 
     date_joined = db.Column(db.DateTime, default=datetime.utcnow())

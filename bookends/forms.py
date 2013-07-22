@@ -72,3 +72,8 @@ class ChangeEmailForm(Form):
 class DeleteBookForm(Form):
     """Form to delete a book with CSRF protection"""
     pass
+
+class BillingForm(Form):
+    """Form containing Stripe token"""
+
+    stripeToken = TextField('Stripe token', validators=[Required()])
