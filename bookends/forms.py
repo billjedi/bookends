@@ -21,7 +21,6 @@ class Unique(object):
         if check:
             raise ValidationError(self.message)
 
-
 class AccountCreateForm(Form):
     """ Basic account creation form."""
 
@@ -79,5 +78,9 @@ class BillingForm(Form):
     stripeToken = TextField('Stripe token', validators=[Required()])
 
 class StopBillingForm(Form):
+    """Form to stop billing"""
+    pass
+
+class AccountDeleteForm(Form):
     """Form to stop billing"""
     pass

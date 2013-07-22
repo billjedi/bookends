@@ -18,7 +18,6 @@ h1 {
 
 h2 {
     font-size: 2.8em;
-    line-height: .7em;
     margin: 15px 0;
 }
 
@@ -169,6 +168,15 @@ input.switch:checked ~ label:after
 
 .status {
     margin-top: 1em;
+}
+
+.delete-warning {
+    font-size: 1.5em;
+    margin: 1em;
+}
+
+.delete-account {
+    display: none;
 }
 
 #navigation {

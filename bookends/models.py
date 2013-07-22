@@ -29,7 +29,7 @@ class Set(db.Model):
 
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='cascade'))
 
 
 class Book(db.Model):
@@ -59,7 +59,8 @@ class Book(db.Model):
     finished = db.Column(db.Boolean, default=False)
 
     sets = db.relationship('Set', secondary=sets,
-        backref=db.backref( 'books', lazy='dynamic'))
+        backref=db.backref( 'books', lazy='dynamic'),
+        cascade='all')
 
 
     def update_sets(self, set_list):

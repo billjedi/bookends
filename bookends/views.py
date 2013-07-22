@@ -8,7 +8,8 @@ from flask.ext.login import login_required, login_user, current_user, logout_use
 from . import app, db, util, check_expired, stripe
 from .forms import (AccountCreateForm, AccountRecoverForm,
                     PasswordForm, SignInForm, AddEditBookForm,
-                    ChangeEmailForm, DeleteBookForm, BillingForm, StopBillingForm )
+                    ChangeEmailForm, DeleteBookForm, BillingForm, StopBillingForm,
+                    AccountDeleteForm )
 from .models import User, Book, Set
 
 
@@ -416,7 +417,20 @@ def account_billing_stop():
 @app.route('/accounts/delete', methods=["GET", "POST"])
 @fresh_login_required
 def account_delete():
-    pass
+    form = AccountDeleteForm()
+
+    if form.validate_on_submit():
+        Book().query.filter_by(user_id=current_user.id).delete()
+        Set().query.filter_by(user_id=current_user.id).delete()
+
+        db.session.delete(current_user)
+        db.session.commit()
+
+        flash("Your account and all of your information was deleted.")
+
+        return redirect(url_for('index'))
+
+    return render_template('accounts/delete.html', form=form)
 
 
 @app.route('/_stripe/webhook', methods=["POST"])

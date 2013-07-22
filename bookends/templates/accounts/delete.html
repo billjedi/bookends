@@ -1,0 +1,32 @@
+{% extends "accounts/layout.html" %}
+
+{% block account_body %}
+<p class="delete-warning">Deleting your account will remove all of your information from our database, even if you still have time before your next payment is due.</p>
+
+<p class="delete-warning">If you are sure that you want to delete your account, type "delete" on your keyboard.</p>
+
+<form action="{{ url_for('account_delete') }}" method="POST">
+    {{ form.csrf_token }}
+    <input type="submit" class="delete-link delete-account" value="I want to delete my account" />
+</form>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script type="text/javascript">
+
+    var deleteKeys = [68, 69, 76, 69, 84, 69];
+    var i = 0;
+
+    $(document).keyup(function(event) {
+
+        if (event.which == deleteKeys[i++]) {
+            console.log(i);
+            if (i == deleteKeys.length) {
+                $('.delete-account').fadeIn();
+            }
+        }
+        else {
+            i = 0;
+        }
+    });
+</script>
+{% endblock %}
