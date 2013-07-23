@@ -54,7 +54,7 @@ class Book(db.Model):
 
     reading = db.Column(db.Boolean, default=False)
 
-    excited = db.Column(db.Boolean, default=False)
+    exciting = db.Column(db.Boolean, default=False)
 
     finished = db.Column(db.Boolean, default=False)
 

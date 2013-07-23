@@ -23,7 +23,7 @@ def index():
 
     return render_template(
         "app_index.html",
-        books_excited=Book.query.filter_by(user_id=current_user.id, excited=True),
+        books_exciting=Book.query.filter_by(user_id=current_user.id, exciting=True),
         books_reading=Book.query.filter_by(user_id=current_user.id, reading=True).all()
     )
 
@@ -180,7 +180,7 @@ def add_book():
             author=form.author.data,
             url=form.url.data,
             reading=form.reading.data,
-            excited=form.excited.data,
+            exciting=form.exciting.data,
             finished=form.finished.data
         )
 
@@ -220,7 +220,7 @@ def edit_book(book_id):
         book.title = form.title.data
         book.author = form.author.data
         book.url = form.url.data
-        book.excited = form.excited.data
+        book.exciting = form.exciting.data
         book.reading = form.reading.data
         book.finished = form.finished.data
 
@@ -425,6 +425,8 @@ def account_delete():
 
         db.session.delete(current_user)
         db.session.commit()
+
+        logout_user
 
         flash("Your account and all of your information was deleted.")
 
