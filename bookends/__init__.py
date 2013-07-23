@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 from functools import wraps
+from werkzeug.contrib.fixers import ProxyFix
+
 import stripe
 
 from flask import Flask, flash, redirect, url_for, request
@@ -13,6 +15,7 @@ from sqlalchemy.orm.interfaces import SessionExtension
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 db = SQLAlchemy(app)
 
