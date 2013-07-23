@@ -1,5 +1,51 @@
 {% extends "home_layout.html" %}
 
 {% block body %}
-Hello, world!
+<header>
+
+    {% for message in get_flashed_messages() %}<p class="message">{{ message }}</p>{% endfor %}
+    <div class="grid-parent">
+        <div class="grid-70">
+            <h1>{ Bookends } helps you manage your reading list.</h1>
+        </div>
+
+        <div class="grid-30">
+            <span id="price">$3.99 / month</span>
+            <a href="{{ url_for('create_account') }}">
+            <div id="register-button">
+                <span id="reg-text">Register now!</span><br>
+                <span id="trial-text">7 day free trial</span><br>
+                <span id="no-card-text">No credit card required</span>
+            </div>
+            </a>
+        </div>
+    </div>
+
+</header>
+
+<hr>
+
+    <div class="grid-parent" id="features">
+
+        <div class="grid-33">
+            <h2>Personal</h2>
+            <p>Mark books you're excited about, are currently reading, and books you've finished.</p>
+        </div>
+
+        <div class="grid-33">
+            <h2>Organized</h2>
+            <p>Group related books into sets to help you track topics and series.</p>
+        </div>
+
+        <div class="grid-33">
+            <h2>Mobile</h2>
+            <p>Manage your reading list on the go. The Bookends interface is mobile-friendly.</p>
+        </div>
+    </div>
+
+    <div class="grid-100 register-call">
+        <p class="register-call"><a href="{{ url_for('create_account') }}">Sign up for the 7 day free trial now!</a></p>
+        <p class="center">&hellip;or <a href="{{ url_for('signin') }}">sign in here</a></p>
+    </div>
+
 {% endblock %}

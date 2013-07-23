@@ -7,7 +7,7 @@
 
 <form action="{{ url_for('account_delete') }}" method="POST">
     {{ form.csrf_token }}
-    <input type="submit" class="delete-link delete-account" value="I want to delete my account" />
+    <input type="submit" class="delete-link delete-account" value="I want to delete my account." />
 </form>
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>

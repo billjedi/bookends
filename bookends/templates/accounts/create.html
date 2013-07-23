@@ -1,10 +1,16 @@
 {% extends "home_layout.html" %}
 
 {% block body %}
-<form action="{{ url_for('create_account') }}" method="POST">
-    Email: <input type="text" name="email" /><br>
-    Password: <input type="password" name="password" /><br>
-    {{ form.csrf_token }}
-    <input type="submit" value="Create my account" />
-</form>
+    <form action="{{ url_for('create_account') }}" method="POST">
+        <a href="{{ url_for('index') }}" class="brand">{ Bookends }</a><br>
+        <h3>Create an account</h3>
+        {% for message in get_flashed_messages() %}<p>{{ message }}</p>{% endfor %}
+        <input type="text" name="email" placeholder="Your email address" /><br>
+        <input type="password" name="password" placeholder="Choose a password" /><br>
+        {{ form.csrf_token }}
+        <input type="submit" value="Create my account" /><br>
+
+        <br>
+        or <a href="{{ url_for('signin') }}">sign in</a>
+    </form>
 {% endblock %}

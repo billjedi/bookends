@@ -1,0 +1,121 @@
+@import url(http://fonts.googleapis.com/css?family=Crimson+Text:400,400italic,600,600italic,700,700italic);
+
+body {
+    font-size: 16px;
+    font-family: "Crimson Text", serif;
+    color: #444;
+}
+
+h1 {
+    font-size: 3em;
+    color: #222;
+    line-height: 1.2em;
+}
+
+h2 {
+    font-size: 2.5em;
+    color: #222;
+}
+
+h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin: .5em;
+}
+
+.message {
+    text-align: center;
+}
+
+.brand {
+    font-size: 1.5em;
+}
+
+header {
+    margin: 4em 0 15em 0;
+}
+
+.center {
+    text-align: center;
+}
+
+header #price {
+    font-size: 2em;
+}
+
+header div#register-button {
+    background: #2ECC71;
+    color: #FFF;
+    font-size: 1.2em;
+    width: 50%;
+    border-radius: .2em;
+    text-align: center;
+    margin-top: 1em;
+    padding: .5em;
+}
+
+#trial-text,
+#no-card-text {
+    font-size: .8em;
+}
+
+header a {
+    text-decoration: none;
+}
+
+#header-signin {
+    font-size: 1.5em;
+}
+
+p {
+    font-size: 1.5em;
+    margin-top: 1em;
+    line-height: 1.4em;
+}
+
+hr {
+    border: 3px solid #222;
+}
+
+div#features {
+    margin-top: 2em;
+}
+
+p.register-call {
+    text-align: center;
+    font-style: italic;
+    font-size: 2em;
+    margin-top: 2em;
+}
+
+a:link,
+a:visited,
+a:hover {
+    color: #e54a4f;
+    text-decoration: none;
+}
+
+form, form input {
+    font-size: 1.8em;
+    margin: .2em 0;
+    font-family: "Crimson Text", serif;
+    text-align: center;
+}
+
+form input[type=text],
+form input[type=password]{
+    max-width: 90%;
+    border: none;
+    border-radius: 7px;
+    color: #444;
+}
+
+form input[type=submit] {
+    font-size: .7em;
+    padding: .7em;
+    background: #2ECC71;
+    color: #FFF;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
