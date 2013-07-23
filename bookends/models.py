@@ -27,7 +27,7 @@ class Set(db.Model):
 
     title = db.Column(db.String(128))
 
-    date_added = db.Column(db.DateTime, default=datetime.utcnow())
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='cascade'))
 
@@ -48,7 +48,7 @@ class Book(db.Model):
 
     url = db.Column(db.String(1024))
 
-    date_added = db.Column(db.DateTime, default=datetime.utcnow())
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -110,11 +110,11 @@ class User(db.Model):
 
     active = db.Column(db.Boolean, default=True)
 
-    date_joined = db.Column(db.DateTime, default=datetime.utcnow())
+    date_joined = db.Column(db.DateTime, default=datetime.utcnow)
 
-    account_expires = db.Column(db.DateTime, default=datetime.utcnow())
+    account_expires = db.Column(db.DateTime, default=datetime.utcnow)
 
-    books = db.relationship('Book', backref='user', lazy='dynamic')
+    books = db.relationship('Book', backref='user', lazy='dynamic', cascade='all')
 
     #-------------------------------------------------------------------------
 

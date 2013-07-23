@@ -420,13 +420,10 @@ def account_delete():
     form = AccountDeleteForm()
 
     if form.validate_on_submit():
-        Book().query.filter_by(user_id=current_user.id).delete()
-        Set().query.filter_by(user_id=current_user.id).delete()
-
         db.session.delete(current_user)
         db.session.commit()
 
-        logout_user
+        logout_user()
 
         flash("Your account and all of your information was deleted.")
 
