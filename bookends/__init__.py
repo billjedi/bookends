@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 import stripe
 
-from flask import Flask, flash, redirect, url_for
+from flask import Flask, flash, redirect, url_for, request
 
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
@@ -33,7 +33,7 @@ def check_expired(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if current_user.is_authenticated():
+        if current_user.is_authenticated() and request.method == "GET":
             if datetime.utcnow() - current_user.account_expires > timedelta(days=7):
                 flash("It looks like it's time to start paying for Bookends.")
                 return redirect(url_for('account_billing'))

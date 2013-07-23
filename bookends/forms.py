@@ -58,7 +58,7 @@ class AddEditBookForm(Form):
     author = TextField('Author', validators=[Length(0,64)])
     url = TextField('URL', validators=[Length(0,1024)])
     sets = TextField('Sets')
-    excited = BooleanField('Excited')
+    exciting = BooleanField('Exciting')
     reading = BooleanField('Reading')
     finished = BooleanField('Finished')
 

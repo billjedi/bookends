@@ -2,7 +2,7 @@
 
 {% block account_body %}
 <form action="" method="POST" id="payment-form">
-    <input type="text" size="20" data-stripe="number" placeholder="{% if current_user.card_last4 %}---- ---- ---- {{ current_user.card_last4 }}{% else %}Card number{% endif %}"/>
+    <input type="text" size="20" data-stripe="number" placeholder="{% if current_user.card_last4 %}---- ---- ---- {{ current_user.card_last4 }}{% else %}Card number{% endif %}"/><br>
 
     <input type="text" size="4" data-stripe="cvc" placeholder="CVC"/><br>
 

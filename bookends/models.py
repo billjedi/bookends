@@ -10,8 +10,8 @@ from . import db, util, bcrypt, app
 
 
 sets = db.Table('sets',
-    db.Column('set_id', db.Integer, db.ForeignKey('set.id')),
-    db.Column('book_id', db.Integer, db.ForeignKey('book.id'))
+    db.Column('set_id', db.Integer, db.ForeignKey('set.id', ondelete='cascade')),
+    db.Column('book_id', db.Integer, db.ForeignKey('book.id', ondelete='cascade'))
 )
 
 
