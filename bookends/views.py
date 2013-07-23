@@ -23,7 +23,7 @@ def index():
 
     return render_template(
         "app_index.html",
-        books_exciting=Book.query.filter_by(user_id=current_user.id, exciting=True),
+        books_exciting=Book.query.filter_by(user_id=current_user.id, exciting=True).all(),
         books_reading=Book.query.filter_by(user_id=current_user.id, reading=True).all()
     )
 
