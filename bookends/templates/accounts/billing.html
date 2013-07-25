@@ -14,7 +14,7 @@
 
     <p class="payment-errors"></p>
 
-    <input type="submit" value="Pay with this card ($12.34 / year)" />
+    <input type="submit" value="Pay with this card ($12 / year)" />
 </form>
 
 {% if current_user.stripe_id %}
@@ -43,7 +43,7 @@
                 // Show the errors on the form
                 $form.find('.payment-errors').text(response.error.message);
                 $form.find('input[type="submit"]').prop('disabled', false);
-                $form.find('input[type="submit"]').val('Pay with this card ($12.34 / year)');
+                $form.find('input[type="submit"]').val('Pay with this card ($12 / year)');
             } else {
                 // token contains id, last4, and card type
                 var token = response.id;
