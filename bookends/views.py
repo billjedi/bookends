@@ -50,7 +50,7 @@ def create_account():
 
         user.send_activation_email()
 
-        flash("You're account has been created. Check your email for your activation link.")
+        flash("Your account has been created. Check your email for your activation link.")
         return redirect(url_for("index"))
 
     return render_template("accounts/create.html", form=form)
