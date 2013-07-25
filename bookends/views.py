@@ -420,6 +420,13 @@ def account_delete():
     form = AccountDeleteForm()
 
     if form.validate_on_submit():
+
+        if current_user.stripe_id:
+
+            customer = stripe.Customer.retrieve(current_user.stripe_id)
+
+            customer.delete()
+
         db.session.delete(current_user)
         db.session.commit()
 
