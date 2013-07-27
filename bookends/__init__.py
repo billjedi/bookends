@@ -27,21 +27,21 @@ def check_expired(f):
     """
     A decorator to check that the user's account is active.
 
-    It will check that the user's account_expires date is no more than 7 days
+    It will check that the user's account_expires date is no more than 14 days
     in the past.
 
-    Flashes a message if the user is in the 7 day grace period.
+    Flashes a message if the user is in the 14 day grace period.
 
     """
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated() and request.method == "GET":
-            if datetime.utcnow() - current_user.account_expires > timedelta(days=7):
+            if datetime.utcnow() - current_user.account_expires > timedelta(days=14):
                 flash("It looks like it's time to start paying for Bookends.")
                 return redirect(url_for('account_billing'))
             elif datetime.utcnow() > current_user.account_expires:
-                delta = timedelta(days=7) - (datetime.utcnow() - current_user.account_expires)
+                delta = timedelta(days=14) - (datetime.utcnow() - current_user.account_expires)
                 flash("You have " + str(delta.days) + " days until you have to <a href='" + url_for('account_billing') + "'>start paying</a>.")
         return f(*args, **kwargs)
 
