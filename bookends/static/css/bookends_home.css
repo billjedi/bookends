@@ -128,3 +128,12 @@ form input[type=submit] {
     border-radius: 7px;
     cursor: pointer;
 }
+
+@media only screen
+and (max-width: 800px) {
+
+.home-screenshot {
+    max-width: 80%;
+}
+
+}
