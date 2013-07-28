@@ -38,7 +38,7 @@ header {
 .home-screenshot {
     max-width: 700px;
     border: 3px solid #222;
-    margin: 3em;
+    margin: 3em 0 2em 0;
     padding: 1em;
 }
 
