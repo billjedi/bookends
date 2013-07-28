@@ -35,8 +35,17 @@ header {
     margin: 4em 0 15em 0;
 }
 
+.home-screenshot {
+    max-width: 700px;
+    border: 3px solid #222;
+    margin: 2em;
+    padding: 1em;
+}
+
 .center {
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 header #price {
