@@ -5,7 +5,7 @@ from flask import render_template, flash, redirect, url_for, abort, request
 
 from flask.ext.login import login_required, login_user, current_user, logout_user, confirm_login, fresh_login_required
 
-from . import app, db, util, check_expired, stripe
+from . import app, db, util
 from .forms import (AccountCreateForm, AccountRecoverForm,
                     PasswordForm, SignInForm, AddEditBookForm,
                     ChangeEmailForm, DeleteBookForm, BillingForm, StopBillingForm,
@@ -14,7 +14,6 @@ from .models import User, Book, Set
 
 
 @app.route('/')
-@check_expired
 def index():
     """ Home page when anonymous, dashboard when authenticated. """
 
@@ -158,7 +157,6 @@ def signout():
 
 @app.route('/books')
 @login_required
-@check_expired
 def books():
     """ List the current user's books. """
 
@@ -167,7 +165,6 @@ def books():
 
 @app.route('/books/add', methods=["GET", "POST"])
 @login_required
-@check_expired
 def add_book():
     """Add a book."""
 
@@ -200,7 +197,6 @@ def add_book():
 
 @app.route('/books/edit/<int:book_id>', methods=["GET", "POST"])
 @login_required
-@check_expired
 def edit_book(book_id):
     """Edit the book with a given id.
 
@@ -239,7 +235,6 @@ def edit_book(book_id):
 
 @app.route('/books/delete/<int:book_id>', methods=["POST"])
 @login_required
-@check_expired
 def delete_book(book_id):
     form = DeleteBookForm()
 
@@ -256,7 +251,6 @@ def delete_book(book_id):
 
 @app.route('/sets')
 @login_required
-@check_expired
 def sets():
     """List all of a user's sets."""
 
@@ -265,7 +259,6 @@ def sets():
 
 @app.route('/sets/view/<int:set_id>')
 @login_required
-@check_expired
 def view_set(set_id):
     """View all of the books in a given set."""
 
@@ -338,80 +331,6 @@ def account_email_update(token):
     flash("Your email has been updated.")
 
     return redirect(url_for('index'))
-
-
-@app.route('/accounts/billing', methods=["GET", "POST"])
-@fresh_login_required
-def account_billing():
-    """
-    This is the route that starts billing the user.
-
-    They submit a form, then their information is turned into a Stripe token,
-    then that token is submitted here.
-
-    """
-
-    form = BillingForm()
-
-    if form.validate_on_submit():
-        token = form.stripeToken.data
-
-        customer = None
-
-        if current_user.stripe_id:
-            customer = stripe.Customer.retrieve(current_user.stripe_id)
-
-            customer.card = token
-
-            customer.save()
-        else:
-            customer = stripe.Customer.create(
-                card=token,
-                plan='bookends1',
-                email=current_user.email
-            )
-
-            current_user.stripe_id = customer.id
-
-        if customer:
-            current_user.account_expires = datetime.fromtimestamp(customer.subscription.current_period_end)
-            current_user.card_last4 = customer.cards.data[0].last4
-
-        db.session.add(current_user)
-        db.session.commit()
-
-        flash("Your billing information has been updated!")
-
-        return redirect(url_for('index'))
-
-    card = None
-
-    if current_user.card_last4:
-        flash("Your current card ends in " + current_user.card_last4 + ".")
-
-    stop_form = StopBillingForm()
-
-    return render_template('accounts/billing.html', form=form, card=card, stripe_publishable_key=app.config["STRIPE_PUBLISHABLE_KEY"], stop_form=stop_form)
-
-
-@app.route('/accounts/billing/stop', methods=["POST"])
-@login_required
-def account_billing_stop():
-    form = StopBillingForm()
-
-    if form.validate_on_submit():
-        customer = stripe.Customer.retrieve(current_user.stripe_id)
-
-        customer.delete()
-        current_user.card_last4 = None
-        current_user.stripe_id = None
-
-        db.session.add(current_user)
-        db.session.commit()
-
-        flash("Your payments have been stopped. Your account will expire in " + str((current_user.account_expires - datetime.utcnow()).days) + " days.")
-
-        return redirect(url_for('index'))
 
 
 @app.route('/accounts/delete', methods=["GET", "POST"])
